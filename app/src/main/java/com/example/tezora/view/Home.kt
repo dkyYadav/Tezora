@@ -18,16 +18,7 @@ import androidx.compose.ui.unit.sp
 @Preview(showSystemUi = true)
 fun Home() {
 
-   /* Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("My App") })
-        },
-        bottomBar = {
-            BottomAppBar {
-                Text("Bottom Bar", modifier = Modifier.padding(16.dp))
-            }
-        }
-    )*/
+   
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
