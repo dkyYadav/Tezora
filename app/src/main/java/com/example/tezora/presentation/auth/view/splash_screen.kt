@@ -1,4 +1,4 @@
-package com.example.tezora.view
+package com.example.tezora.presentation.auth.view
 
 
 
@@ -29,9 +29,6 @@ fun splash_screen() {
             contentDescription = "splash screen",
             contentScale = ContentScale.Fit,
             modifier = Modifier.size(200.dp)
-
-
-
         )
     }
 }
