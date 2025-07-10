@@ -137,7 +137,7 @@ fun Login(navHostController: NavHostController) {
             OutlinedButton(onClick = {},
                 modifier = Modifier.height(50.dp)
             ) { Icon(
-                painter = painterResource(id = R.drawable.facebooks),
+                painter = painterResource(id = R.drawable.ic_facebook),
                 contentDescription = "Facebook",
                 tint = Color.Unspecified
                 )
