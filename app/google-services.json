@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "325914300790",
+    "project_id": "tezora-cd168",
+    "storage_bucket": "tezora-cd168.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325914300790:android:71f1938f508c54a819aa57",
+        "android_client_info": {
+          "package_name": "com.example.tezora"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1FtvX8euHoncxmpn9s2z7ilGqH_kaNkQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,15 +4,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.example.tezora.data.repository.AuthRepositoryImpl
+import com.example.tezora.domain.Usecase.LoginUseCase
+import com.example.tezora.domain.Usecase.signupusecase
+import com.example.tezora.domain.repository.AuthRepository
 import com.example.tezora.navigation.Navcontroler
+import com.example.tezora.presentation.auth.AuthViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            Navcontroler()
 
+        // manual Dependency Injection
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val authRepository : AuthRepository = AuthRepositoryImpl(firebaseAuth)
+        val signupusecase = signupusecase(authRepository)
+        val loginUseCase = LoginUseCase(authRepository)
+        val authViewModel = AuthViewModel(signupusecase,loginUseCase)
+        setContent {
+            Navcontroler(authViewModel)
         }
     }
 }

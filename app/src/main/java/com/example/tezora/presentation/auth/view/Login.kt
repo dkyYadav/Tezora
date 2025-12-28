@@ -17,11 +17,14 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,16 +34,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tezora.R
+import com.example.tezora.Uistate
 import com.example.tezora.navigation.Routes
+import com.example.tezora.presentation.auth.AuthViewModel
 
 @Composable
 //@Preview(showBackground = true)
-fun Login(navHostController: NavHostController) {
+fun Login(navHostController: NavHostController,
+          authViewModel: AuthViewModel
+) {
 
+    var useremail by remember() { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+
+    val authState by authViewModel.authState.collectAsState()
+
+    LaunchedEffect(authState) {
+        when(val currentState = authState){
+            is Uistate.Failure -> {
+                showError = true
+                errorMessage = currentState.error
+            }
+            is Uistate.Success-> {
+                navHostController.navigate(Routes.Home){
+                    popUpTo(Routes.Login) {inclusive = true}
+                }
+            }
+            else -> {}
+        }
+    }
 
     Column (modifier = Modifier
         .fillMaxSize()
@@ -57,7 +86,7 @@ fun Login(navHostController: NavHostController) {
         }
         Spacer(modifier = Modifier.height(20.dp))
 
-        var useremail by remember() { mutableStateOf("") }
+
         OutlinedTextField(
             value = useremail,
             onValueChange = { useremail = it },
@@ -73,7 +102,7 @@ fun Login(navHostController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(20.dp))
 
-        var password by remember { mutableStateOf("") }
+
 
         OutlinedTextField(
             value = password,
@@ -83,6 +112,7 @@ fun Login(navHostController: NavHostController) {
             label = {
                 Text("Password")
             },
+            visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp),
             leadingIcon = {
                 Icon(
@@ -111,8 +141,21 @@ fun Login(navHostController: NavHostController) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        // show Error msg
+        if (showError){
+            Text(
+                text =  errorMessage,
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
+
         Button( onClick = {
             // button on click
+            if (useremail.isNotBlank() && password.isNotBlank()){
+                authViewModel.Login(useremail,password)
+            }
         },
             modifier = Modifier.height(50.dp).fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
@@ -120,8 +163,17 @@ fun Login(navHostController: NavHostController) {
                 .buttonColors(containerColor = colorResource(R.color.main_Color) )
 
         ) {
-            Text(" Login ",
-                color = Color.Black)
+            if (authState is Uistate.Loading){
+                CircularProgressIndicator(
+                    color = Color.White,
+                    strokeWidth = 2.dp
+                )
+            }else {
+                Text(
+                    " Login ",
+                    color = Color.Black
+                )
+            }
         }
         Spacer(modifier = Modifier.height(20.dp))
 

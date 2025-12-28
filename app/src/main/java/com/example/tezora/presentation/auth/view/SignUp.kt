@@ -1,5 +1,6 @@
 package com.example.tezora.presentation.auth.view
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import com.example.tezora.R
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,16 +40,46 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tezora.Uistate
 import com.example.tezora.navigation.Routes
+import com.example.tezora.presentation.auth.AuthViewModel
 
 
 @Composable
-fun SignUp(navHostController: NavHostController) {
+fun SignUp(
+    navHostController: NavHostController,
+    authViewModel: AuthViewModel
+) {
 
     val context = LocalContext.current
+    var userEmail by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var Repassword by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    // Observe auth state
+    val authState by authViewModel.authState.collectAsState()
 
-    Column (modifier = Modifier.fillMaxSize().padding(25.dp),
+    // Handle navigation after successful signup
+    LaunchedEffect(authState) {
+        when(authState){
+            is Uistate.Failure -> {
+                errorMessage = (authState as Uistate.Failure).error
+            }
+            is Uistate.Success-> {
+                navHostController.navigate(Routes.Login) {
+                    popUpTo(Routes.Signup){inclusive = true}
+                }
+                Toast.makeText(context, ("Successful"), Toast.LENGTH_SHORT).show()
+            }
+
+            else -> {}
+        }
+    }
+
+    Column (modifier = Modifier
+        .fillMaxSize()
+        .padding(25.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
@@ -58,7 +91,7 @@ fun SignUp(navHostController: NavHostController) {
             )
         Spacer(modifier = Modifier.height(15.dp))
 
-       var userEmail by remember { mutableStateOf("") }
+
 
         OutlinedTextField(
             value = userEmail,
@@ -73,12 +106,14 @@ fun SignUp(navHostController: NavHostController) {
                     contentDescription = "Email"
                 )
             },
-            modifier = Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp, end = 10.dp)
         )
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        var password by remember { mutableStateOf("") }
+
 
         OutlinedTextField(
             value = password,
@@ -101,12 +136,14 @@ fun SignUp(navHostController: NavHostController) {
                     modifier = Modifier.size(24.dp),
                 )
             },
-            modifier = Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp, end = 10.dp)
         )
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        var Repassword by remember { mutableStateOf("") }
+
 
         OutlinedTextField(
             value = Repassword,
@@ -129,23 +166,39 @@ fun SignUp(navHostController: NavHostController) {
                     modifier = Modifier.size(24.dp),
                 )
             },
-            modifier = Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp, end = 10.dp)
         )
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             text = "By clicking the Register button, you agree to the public offer",
-            modifier = Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp, end = 10.dp),
             fontSize = 16.sp,
             )
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Button(onClick = {
+        // Error Message if pass not matched
+        if (errorMessage != null){
+            Text(text = errorMessage ?: "",
+                color = Color.Red,
+                fontSize = 14.sp)
+        }
 
-           // on button click
+        Button(onClick = {
+        // on button click
+            if (password != Repassword){
+                errorMessage = "Password do not Match"
+            }else{
+                authViewModel.signup(userEmail,password)
+            }
         },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(start = 15.dp, end = 15.dp)
                 .heightIn(50.dp),
             shape = RoundedCornerShape(10.dp),
@@ -210,7 +263,7 @@ fun SignUp(navHostController: NavHostController) {
                 text = "Login",
                 color = colorResource(R.color.main_Color),
                 modifier = Modifier.clickable {
-                    navHostController.navigate(Routes.Login)
+                   navHostController.navigate(Routes.Login)
                  }, fontSize = 20.sp
 
             )
