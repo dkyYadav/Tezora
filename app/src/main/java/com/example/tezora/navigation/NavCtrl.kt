@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.tezora.presentation.auth.AuthViewModel
 import com.example.tezora.presentation.auth.view.Forget
-import com.example.tezora.presentation.auth.view.HomeScreen
+import com.example.tezora.presentation.HomeScreen.HomeScreen
 import com.example.tezora.presentation.auth.view.Login
 import com.example.tezora.presentation.auth.view.SignUp
 import com.example.tezora.presentation.auth.view.splash_screen

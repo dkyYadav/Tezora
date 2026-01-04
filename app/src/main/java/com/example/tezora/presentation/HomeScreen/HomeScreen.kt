@@ -1,4 +1,4 @@
-package com.example.tezora.presentation.auth.view
+package com.example.tezora.presentation.HomeScreen
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -40,9 +40,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.tezora.R
 import com.example.tezora.presentation.auth.AuthViewModel
+import javax.annotation.meta.When
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +51,8 @@ fun HomeScreenUI(
     onLogoutClick: () -> Unit
 ) {
 
+
+    var selectedIndex by remember { mutableStateOf(0) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -103,10 +105,27 @@ fun HomeScreenUI(
                 }
             )
         },
+        // Bottom Bar
+        bottomBar = {
+            CustomBottomBar(
+                selectedIndex = selectedIndex,
+                onItemSelected = { selectedIndex = it },
+                onCartClick = {
+                    // Navigate to Cart Screen
+                  selectedIndex = 2
+                }
+            )
+        }
     ) {  innerPadding ->
-        Screenlist(
-            innerPadding = innerPadding
-        )
+        when(selectedIndex){
+            0-> Screenlist(
+                innerPadding = innerPadding
+            )
+            1-> WishlistScreen()
+            2-> CartView()
+            3-> searchBar()
+            4-> SettingScreen()
+        }
     }
 }
 
