@@ -1,5 +1,6 @@
 package com.example.tezora.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.compose.NavHost
@@ -12,13 +13,17 @@ import com.example.tezora.presentation.auth.view.Login
 import com.example.tezora.presentation.auth.view.SignUp
 import com.example.tezora.presentation.auth.view.splash_screen
 import androidx.compose.runtime.getValue
-
+import com.example.tezora.presentation.HomeScreen.HomeProduct
+import com.example.tezora.presentation.HomeScreen.Screenlist
+import com.example.tezora.presentation.HomeScreen.SettingScreen
+import com.example.tezora.presentation.HomeScreen.viewModel.ProductViewModel
 
 
 @Composable
 fun Navcontroler(
     authViewModel: AuthViewModel
-) {
+
+    ) {
 
     val navController = rememberNavController()
 
@@ -56,6 +61,12 @@ fun Navcontroler(
         composable <Routes.Home>{
             HomeScreen(authViewModel)
         }
+        composable < Routes.HomeProduct>{
+            HomeProduct(
+
+            )
+        }
+
 
     }
 

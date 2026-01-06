@@ -40,7 +40,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import com.example.tezora.R
+import com.example.tezora.presentation.HomeScreen.viewModel.ProductViewModel
 import com.example.tezora.presentation.auth.AuthViewModel
 import javax.annotation.meta.When
 
@@ -119,7 +121,7 @@ fun HomeScreenUI(
     ) {  innerPadding ->
         when(selectedIndex){
             0-> Screenlist(
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
             )
             1-> WishlistScreen()
             2-> CartView()
@@ -130,10 +132,12 @@ fun HomeScreenUI(
 }
 
 @Composable
-fun Screenlist(innerPadding: PaddingValues, ) {
+fun Screenlist(innerPadding: PaddingValues,  ) {
 
-
-    LazyColumn(
+    Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+        HomeProduct()
+    }
+   /* LazyColumn(
         modifier = Modifier
             .padding(innerPadding)
             .fillMaxSize()
@@ -165,7 +169,15 @@ fun Screenlist(innerPadding: PaddingValues, ) {
         item {
             Catogaries()
         }
-    }
+        item { Spacer(modifier = Modifier.height(10.dp)) }
+        item {
+            Column (modifier = Modifier.fillMaxSize()
+            ){
+                HomeProduct()
+            }
+
+        }
+    }*/
 }
 
 @Composable

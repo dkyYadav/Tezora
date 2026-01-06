@@ -22,5 +22,10 @@ sealed class Routes {
     @Serializable
     object  Home: Routes()
 
+    @Serializable
+    object HomeProduct: Routes()
+
+    @Serializable
+    object Screenlist: Routes()
 
 }
