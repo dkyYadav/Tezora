@@ -5,8 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.tezora.data.remote.RetrofitClient
-import com.example.tezora.data.repository.AuthRepositoryImpl
-import com.example.tezora.data.repository.ProductRepositoryImpl
+import com.example.tezora.data.repositoryImpl.AuthRepositoryImpl
+import com.example.tezora.data.repositoryImpl.ProductRepositoryImpl
 import com.example.tezora.domain.Usecase.GetProductUseCase
 import com.example.tezora.domain.Usecase.LoginUseCase
 import com.example.tezora.domain.Usecase.signupusecase

@@ -16,12 +16,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -38,13 +42,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import com.example.tezora.R
-import com.example.tezora.presentation.HomeScreen.viewModel.ProductViewModel
 import com.example.tezora.presentation.auth.AuthViewModel
-import javax.annotation.meta.When
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -134,67 +134,46 @@ fun HomeScreenUI(
 @Composable
 fun Screenlist(innerPadding: PaddingValues,  ) {
 
-    Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-        HomeProduct()
-    }
-   /* LazyColumn(
+    var searchQuery by remember { mutableStateOf("") }
+    Column(
         modifier = Modifier
-            .padding(innerPadding)
             .fillMaxSize()
+            .padding(innerPadding)
     ) {
-
-        item {
-            searchBar()
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(5.dp))
-        }
-
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = "All Featured")
-                 Spacer(modifier = Modifier.weight(1f))
-
-            }
-        }
-
-        // List of Items
-        item {
-            Catogaries()
-        }
-        item { Spacer(modifier = Modifier.height(10.dp)) }
-        item {
-            Column (modifier = Modifier.fillMaxSize()
-            ){
-                HomeProduct()
-            }
+        // Search Bar
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            placeholder = { Text("Search any Product...") },
+            leadingIcon = {
+                Icon(Icons.Default.Search, contentDescription = "Search")
+            },
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+        )
+        Spacer(modifier = Modifier.height(5.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "All Featured")
+            Spacer(modifier = Modifier.weight(1f))
 
         }
-    }*/
+
+        Catogaries()
+        Spacer(modifier = Modifier.height(10.dp))
+        ProductScreen()
+    }
 }
 
-@Composable
-fun searchBar(){
-var searchText by remember { mutableStateOf("") }
 
-    TextField(
-        value = searchText,
-        onValueChange = {searchText = it},
-        placeholder = {Text("Search...")},
-        shape = RoundedCornerShape(16.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        singleLine = true,
-    )
-}
 
 @Composable
 fun Catogaries() {
@@ -393,12 +372,6 @@ HomeScreenUI(
 )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HomePreview() {
- HomeScreenUI {
 
- }
-}
 
 

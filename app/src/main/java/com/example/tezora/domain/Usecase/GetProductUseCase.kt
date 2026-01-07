@@ -7,7 +7,7 @@ import com.example.tezora.domain.repository.ProductRepository
 class GetProductUseCase(
     private val repository: ProductRepository
 ) {
-    suspend operator fun invoke(): List<ProductX>{
+    suspend operator fun invoke(): Uistate<List<ProductX>>{
         return repository.getproducts()
     }
 }

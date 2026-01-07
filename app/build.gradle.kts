@@ -99,4 +99,10 @@ dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
 
 
+    // coil image show in ui from api
+    implementation("io.coil-kt.coil3:coil-compose:3.0.3")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.3")
+
+
+
 }

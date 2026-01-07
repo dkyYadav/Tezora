@@ -1,7 +1,6 @@
 package com.example.tezora.presentation.HomeScreen.viewModel
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateSetOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tezora.Uistate
@@ -25,37 +24,29 @@ class ProductViewModel(
     private val getProductUseCase: GetProductUseCase
 ) : ViewModel(){
 
-    private val _state = MutableStateFlow<Uistate<List<ProductX>>>(Uistate.Idle)
-    val state: StateFlow<Uistate<List<ProductX>>> = _state
+    private val _productsState =
+        MutableStateFlow<Uistate<List<ProductX>>>(Uistate.Idle)
+    val productsState: StateFlow<Uistate<List<ProductX>>> = _productsState
 
     init {
         fetchProduct()
     }
     fun fetchProduct(){
+        Log.d("ProductViewModel", "fetchProducts() called")
+        _productsState.value = Uistate.Loading
         viewModelScope.launch {
-            Log.d("ProductVM", "fetchProducts() called")
-            _state.value = Uistate.Loading
-
             try {
-                val product  = getProductUseCase()
-                Log.d(
-                    "ProductVM",
-                    "Products fetched successfully. Size = ${product.size}"
-                )
-
-                product.forEach {
-                    Log.d("ProductVM", "Product: ${it.title}")
-                }
-
-                withContext(Dispatchers.Main) {
-                    _state.value = Uistate.Success(product)
-                }
-
+                val result  = getProductUseCase()
+                Log.d("ProductViewModel","Products fetched successfully. Size = ${result}\n")
+                _productsState.value = result
             }catch (e: Exception){
-                Log.e("ProductVM", "Crash happened", e)
-
-                _state.value = Uistate.Failure(e.message.toString())
+                Log.e("ProductViewModel", "Error loading products: ${e.message}", e)
+                _productsState.value = Uistate.Failure(e.message ?: "Unknown error")
             }
         }
+    }
+
+    fun retryLoading(){
+        fetchProduct()
     }
 }
